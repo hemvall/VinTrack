@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npx --yes create-vite . --template react)",
+      "Bash(npx --yes create-vite vintrack-tmp --template react)",
+      "Bash(cp -r vintrack-tmp/* vintrack-tmp/.* .)",
+      "Bash(rm -rf vintrack-tmp)",
+      "Bash(npm install *)",
+      "Bash(npx vite *)",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(curl -s http://localhost:5173/src/main.jsx)",
+      "Bash(curl -s http://localhost:5173/src/App.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/Dashboard.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/CustomSelect.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/ArticleModal.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/PresetManager.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/ArticleList.jsx)",
+      "Bash(curl -s http://localhost:5173/src/components/AuthScreen.jsx)",
+      "Bash(curl -s http://localhost:5173/src/hooks/useAuth.js)",
+      "Bash(curl -s http://localhost:5173/src/lib/supabase.js)"
+    ]
+  }
+}
