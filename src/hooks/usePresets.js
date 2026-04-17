@@ -35,6 +35,8 @@ export function usePresets(userId) {
         shippingCost: 0,
         listingTitle: '',
         listingDescription: '',
+        imageUrl: '',
+        sourceUrl: '',
         notes: '',
         ...preset,
       };

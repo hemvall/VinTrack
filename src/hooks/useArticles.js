@@ -38,6 +38,8 @@ export function useArticles(userId) {
         size: '',
         listingTitle: '',
         listingDescription: '',
+        imageUrl: '',
+        sourceUrl: '',
         notes: '',
         ...article,
       };

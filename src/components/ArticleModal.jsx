@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Save, Zap, Sparkles, Copy, Check, FileText } from 'lucide-react';
+import { X, Save, Zap, Sparkles, Copy, Check, FileText, Image as ImageIcon, Link as LinkIcon, ExternalLink } from 'lucide-react';
 import CustomSelect from './CustomSelect';
 
 const CATEGORIES = [
@@ -28,6 +28,8 @@ const emptyForm = {
   shippingCost: '',
   listingTitle: '',
   listingDescription: '',
+  imageUrl: '',
+  sourceUrl: '',
   notes: '',
 };
 
@@ -110,6 +112,8 @@ export default function ArticleModal({ open, onClose, onSave, article, presets }
       shippingCost: preset.shippingCost || form.shippingCost,
       listingTitle: preset.listingTitle || form.listingTitle,
       listingDescription: preset.listingDescription || form.listingDescription,
+      imageUrl: preset.imageUrl || form.imageUrl,
+      sourceUrl: preset.sourceUrl || form.sourceUrl,
       notes: preset.notes || form.notes,
     });
     setShowPresets(false);
@@ -295,6 +299,55 @@ export default function ArticleModal({ open, onClose, onSave, article, presets }
                   placeholder={"Write your Vinted listing description here...\nCondition, defects, sizing info, etc."}
                 />
               </div>
+
+              {/* ---- Media & Source ---- */}
+              <div className="form-divider">
+                <ImageIcon size={14} />
+                <span>Image & Source</span>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group flex-2">
+                  <label>Image URL / Path</label>
+                  <input
+                    value={form.imageUrl}
+                    onChange={set('imageUrl')}
+                    placeholder="https://... or /path/to/image.jpg"
+                  />
+                </div>
+                <div className="form-group flex-2">
+                  <div className="label-row">
+                    <label>Source URL (where you bought it)</label>
+                    {form.sourceUrl && (
+                      <a
+                        className="btn-copy"
+                        href={form.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Open source"
+                      >
+                        <ExternalLink size={13} />
+                      </a>
+                    )}
+                  </div>
+                  <input
+                    value={form.sourceUrl}
+                    onChange={set('sourceUrl')}
+                    placeholder="https://vinted.com/..."
+                  />
+                </div>
+              </div>
+
+              {form.imageUrl && (
+                <div className="image-preview">
+                  <img
+                    src={form.imageUrl}
+                    alt="preview"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                    onLoad={(e) => { e.currentTarget.style.display = 'block'; }}
+                  />
+                </div>
+              )}
 
               {/* ---- Notes ---- */}
               <div className="form-group" style={{ marginTop: 10 }}>

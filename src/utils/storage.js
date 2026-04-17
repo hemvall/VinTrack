@@ -10,6 +10,8 @@ function toSnake(obj) {
     shippingCost: 'shipping_cost',
     listingTitle: 'listing_title',
     listingDescription: 'listing_description',
+    imageUrl: 'image_url',
+    sourceUrl: 'source_url',
     createdAt: 'created_at',
     userId: 'user_id',
   };
@@ -29,6 +31,8 @@ function toCamel(obj) {
     shipping_cost: 'shippingCost',
     listing_title: 'listingTitle',
     listing_description: 'listingDescription',
+    image_url: 'imageUrl',
+    source_url: 'sourceUrl',
     created_at: 'createdAt',
     user_id: 'userId',
   };

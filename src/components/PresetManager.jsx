@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Zap, Edit3, Trash2, Save, X, FileText } from 'lucide-react';
+import { Plus, Zap, Edit3, Trash2, Save, X, FileText, Image as ImageIcon, ExternalLink } from 'lucide-react';
 import CustomSelect from './CustomSelect';
 
 const CATEGORIES = [
@@ -19,6 +19,8 @@ const emptyPreset = {
   shippingCost: '',
   listingTitle: '',
   listingDescription: '',
+  imageUrl: '',
+  sourceUrl: '',
   notes: '',
 };
 
@@ -43,6 +45,8 @@ export default function PresetManager({ presets, addPreset, updatePreset, delete
       shippingCost: p.shippingCost || '',
       listingTitle: p.listingTitle || '',
       listingDescription: p.listingDescription || '',
+      imageUrl: p.imageUrl || '',
+      sourceUrl: p.sourceUrl || '',
       notes: p.notes || '',
     });
     setEditing(p.id);
@@ -164,6 +168,41 @@ export default function PresetManager({ presets, addPreset, updatePreset, delete
                 placeholder={"Pre-write your Vinted description...\nCondition, sizing, details..."}
               />
             </div>
+            <div className="form-divider">
+              <ImageIcon size={14} />
+              <span>Image & Source</span>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group flex-2">
+                <label>Image URL / Path</label>
+                <input
+                  value={form.imageUrl}
+                  onChange={set('imageUrl')}
+                  placeholder="https://... or /path/to/image.jpg"
+                />
+              </div>
+              <div className="form-group flex-2">
+                <label>Source URL (where you buy it)</label>
+                <input
+                  value={form.sourceUrl}
+                  onChange={set('sourceUrl')}
+                  placeholder="https://vinted.com/..."
+                />
+              </div>
+            </div>
+
+            {form.imageUrl && (
+              <div className="image-preview">
+                <img
+                  src={form.imageUrl}
+                  alt="preview"
+                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  onLoad={(e) => { e.currentTarget.style.display = 'block'; }}
+                />
+              </div>
+            )}
+
             <div className="form-group" style={{ marginTop: 10 }}>
               <label>Notes</label>
               <input value={form.notes} onChange={set('notes')} placeholder="Internal notes..." />
@@ -193,10 +232,30 @@ export default function PresetManager({ presets, addPreset, updatePreset, delete
               <div className="preset-card-header">
                 <h4>{p.name || 'Unnamed'}</h4>
                 <div className="preset-card-actions">
+                  {p.sourceUrl && (
+                    <a
+                      className="btn-icon small"
+                      href={p.sourceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      title="Open source"
+                    >
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
                   <button className="btn-icon small" onClick={() => startEdit(p)}><Edit3 size={14} /></button>
                   <button className="btn-icon small danger" onClick={() => deletePreset(p.id)}><Trash2 size={14} /></button>
                 </div>
               </div>
+              {p.imageUrl && (
+                <div className="preset-thumb">
+                  <img
+                    src={p.imageUrl}
+                    alt={p.name || 'preset'}
+                    onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                  />
+                </div>
+              )}
               <div className="preset-card-details">
                 {p.brand && <span className="tag">{p.brand}</span>}
                 {p.category && <span className="tag">{p.category}</span>}
