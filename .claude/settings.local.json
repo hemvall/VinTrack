@@ -18,7 +18,9 @@
       "Bash(curl -s http://localhost:5173/src/components/ArticleList.jsx)",
       "Bash(curl -s http://localhost:5173/src/components/AuthScreen.jsx)",
       "Bash(curl -s http://localhost:5173/src/hooks/useAuth.js)",
-      "Bash(curl -s http://localhost:5173/src/lib/supabase.js)"
+      "Bash(curl -s http://localhost:5173/src/lib/supabase.js)",
+      "Bash(npm view *)",
+      "Bash(npm run *)"
     ]
   }
 }
