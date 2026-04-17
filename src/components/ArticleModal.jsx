@@ -128,6 +128,7 @@ export default function ArticleModal({ open, onClose, onSave, article, presets }
       soldPrice: parseFloat(form.soldPrice) || 0,
       fees: parseFloat(form.fees) || 0,
       shippingCost: parseFloat(form.shippingCost) || 0,
+      soldDate: form.soldDate || null,
     });
     onClose();
   };
