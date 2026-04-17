@@ -422,6 +422,52 @@ body {
   background: rgba(255, 255, 255, 0.025);
 }
 
+.articles-table tbody tr.row-selected td {
+  background: rgba(120, 80, 220, 0.08);
+}
+
+.checkbox-cell {
+  width: 36px;
+  padding-right: 0 !important;
+  text-align: center;
+}
+
+.checkbox-cell input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--teal);
+}
+
+/* ===== Bulk action bar ===== */
+.bulk-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  background: linear-gradient(135deg, rgba(15, 185, 177, 0.08), rgba(120, 80, 220, 0.08));
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+}
+
+.bulk-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.bulk-sub {
+  opacity: 0.7;
+  margin-left: 2px;
+}
+
 .title-cell {
   font-weight: 600;
   max-width: 220px;

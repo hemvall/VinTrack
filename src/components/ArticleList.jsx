@@ -9,6 +9,7 @@ import {
   Package,
   ArrowUpDown,
   FileText,
+  Tag,
 } from 'lucide-react';
 import ArticleModal from './ArticleModal';
 
@@ -28,10 +29,33 @@ export default function ArticleList({ articles, addArticle, updateArticle, delet
   const [filterStatus, setFilterStatus] = useState('all');
   const [sortKey, setSortKey] = useState('createdAt');
   const [sortDir, setSortDir] = useState('desc');
+  const [selected, setSelected] = useState(() => new Set());
 
   const toggleSort = (key) => {
     if (sortKey === key) setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
     else { setSortKey(key); setSortDir('desc'); }
+  };
+
+  const toggleSelect = (id) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const clearSelection = () => setSelected(new Set());
+
+  const markSelectedAsListed = async () => {
+    const ids = [...selected];
+    await Promise.all(
+      ids
+        .map((id) => articles.find((a) => a.id === id))
+        .filter((a) => a && a.status === 'unlisted')
+        .map((a) => updateArticle(a.id, { status: 'listed' }))
+    );
+    clearSelection();
   };
 
   const filtered = articles
@@ -59,6 +83,17 @@ export default function ArticleList({ articles, addArticle, updateArticle, delet
     a.status === 'sold'
       ? (a.soldPrice || 0) - (a.buyPrice || 0) - (a.fees || 0) - (a.shippingCost || 0)
       : null;
+
+  const selectableIds = filtered.map((a) => a.id);
+  const allSelected = selectableIds.length > 0 && selectableIds.every((id) => selected.has(id));
+  const toggleSelectAll = () => {
+    if (allSelected) clearSelection();
+    else setSelected(new Set(selectableIds));
+  };
+
+  const selectedUnlistedCount = [...selected]
+    .map((id) => articles.find((a) => a.id === id))
+    .filter((a) => a && a.status === 'unlisted').length;
 
   return (
     <div className="articles-section">
@@ -113,6 +148,36 @@ export default function ArticleList({ articles, addArticle, updateArticle, delet
         </div>
       </motion.div>
 
+      <AnimatePresence>
+        {selected.size > 0 && (
+          <motion.div
+            className="bulk-action-bar"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+          >
+            <span className="bulk-count">{selected.size} selected</span>
+            <div className="bulk-actions">
+              <button
+                type="button"
+                className="btn btn-primary btn-glow"
+                onClick={markSelectedAsListed}
+                disabled={selectedUnlistedCount === 0}
+                title={selectedUnlistedCount === 0 ? 'No unlisted items in selection' : ''}
+              >
+                <Tag size={14} /> Mark as Listed
+                {selectedUnlistedCount > 0 && selectedUnlistedCount !== selected.size && (
+                  <span className="bulk-sub"> ({selectedUnlistedCount})</span>
+                )}
+              </button>
+              <button type="button" className="btn btn-ghost" onClick={clearSelection}>
+                Clear
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div
         className="table-wrapper"
         initial={{ opacity: 0, y: 16 }}
@@ -122,6 +187,14 @@ export default function ArticleList({ articles, addArticle, updateArticle, delet
         <table className="articles-table">
           <thead>
             <tr>
+              <th className="checkbox-cell">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={toggleSelectAll}
+                  aria-label="Select all"
+                />
+              </th>
               <th onClick={() => toggleSort('title')}>
                 Title <ArrowUpDown size={12} />
               </th>
@@ -149,7 +222,16 @@ export default function ArticleList({ articles, addArticle, updateArticle, delet
                     exit={{ opacity: 0, x: 12, transition: { duration: 0.15 } }}
                     transition={{ delay: i * 0.03 }}
                     layout
+                    className={selected.has(a.id) ? 'row-selected' : ''}
                   >
+                    <td className="checkbox-cell">
+                      <input
+                        type="checkbox"
+                        checked={selected.has(a.id)}
+                        onChange={() => toggleSelect(a.id)}
+                        aria-label={`Select ${a.title}`}
+                      />
+                    </td>
                     <td className="title-cell">
                       <span>{a.title}</span>
                       {(a.listingTitle || a.listingDescription) && (
